@@ -22,7 +22,7 @@ function varargout = GUI(varargin)
 
 % Edit the above text to modify the response to help GUI
 
-% Last Modified by GUIDE v2.5 18-May-2019 22:51:46
+% Last Modified by GUIDE v2.5 19-May-2019 00:11:39
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -112,7 +112,7 @@ function edit4_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit4 as text
 %        str2double(get(hObject,'String')) returns contents of edit4 as a double
-handles.f_activacao = strsplit(get(hObject, 'String'), {' ', ','}, 'CollapseDelimiters', true);
+handles.f_activacao = lower(strsplit(get(hObject, 'String'), {' ', ','}, 'CollapseDelimiters', true));
 guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -139,7 +139,7 @@ function edit5_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit5 as text
 %        str2double(get(hObject,'String')) returns contents of edit5 as a double
-handles.f_treino = strsplit(get(hObject, 'String'), {' ', ','}, 'CollapseDelimiters', true);
+handles.f_treino = lower(strsplit(get(hObject, 'String'), {' ', ','}, 'CollapseDelimiters', true));
 guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -176,7 +176,8 @@ elseif aux3 > 1
 elseif aux2 ~= aux1 + 1
     errordlg('Nº de funções de activação não correspondem à topologia da rede neuronal!', 'ERRO');
 else
-    formas_2(handles.neuronios, handles.f_activacao, handles.f_treino);
+    rede_neuronal = formas2_GUI(handles.neuronios, handles.f_activacao, handles.f_treino);
+
 end
 
 % --- Executes on button press in pushbutton2.
@@ -184,6 +185,7 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+save rede_neuronal;
 
 % --- Executes on button press in pushbutton3.
 function pushbutton3_Callback(hObject, eventdata, handles)
@@ -191,6 +193,5 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 [file, path] = uigetfile('C:\Users\Asus\Desktop\ISEC\CR\TP\*.mat');
-if isequal(file, 0)
-   warndlg('Utilizador cancelou acção','Aviso');
-end
+aux = strcat(path,file);
+load(aux);

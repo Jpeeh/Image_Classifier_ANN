@@ -2,7 +2,7 @@ function formas_3()
 
 %%GUARDAR A REDE NEURONAL PARA SE USAR NA FUNÇÃO ALÍNEA_D.M
 close all;
-load NN_FORMAS2.mat; %%CARREGA A REDE NEURONAL DA FORMAS_2 COM MELHOR RESULTADO 
+net = load('NN_FORMAS2.mat'); %%CARREGA A REDE NEURONAL DA FORMAS_2 COM MELHOR RESULTADO 
 
 d = dir(['C:\Users\Asus\Desktop\ISEC\CR\TP\TemaRN_Imagens\Formas_3' '\' '\**\' '*.png']); %% ->RETORNA TODAS AS IMAGENS PNG DENTRO DA PASTA FORMAS_3
 M = zeros(400,200);
@@ -40,7 +40,24 @@ for k = 150:200
    target(:, k) = x;
 end
 
-%{
+%% SIMULAR 
+out = sim(net.net, M);
+
+%% VISUALIZAR DESEMPENHO 
+%plotconfusion(net.target, out);
+
+%% Calcula e mostra a percentagem de classificacoes corretas no total dos exemplos
+r=0;
+for i=1:size(out,2)                 % Para cada classificacao  
+  [a b] = max(out(:,i));            % b guarda a linha onde encontrou valor mais alto da saida obtida
+  [c d] = max(target(:,i));         % d guarda a linha onde encontrou valor mais alto da saida desejada
+  if b == d                         % se estao na mesma linha, a classificacao foi correta (incrementa 1)
+      r = r+1;
+  end
+end
+accuracy = r/size(out,2)*100;
+fprintf('Precisao total %f, usando a Rede da Alínea anterior\n', accuracy)
+
 %% CRIAÇÃO E CONFIGURAÇÃO DA REDE NEURONAL DE 1 CAMADA COM 10 NEURÓNIOS
 net = feedforwardnet(10);               %1 camada escondida com 10 neurónios
 net.layers{1}.transferFcn = 'tansig';   %INDICAR: Funções de ativação das camadas escondidas e de saida: {'purelin', 'logsig', 'tansig'}
@@ -49,6 +66,9 @@ net.trainFcn = 'traincgb';               %INDICAR: Função de treino: {'trainlm',
 
 %% Divisão dos exemplos pelos conjuntos de treino, validação e teste
 net.divideFcn = 'dividerand';
+net.divideParam.trainRatio = 0.7;
+net.divideParam.valRatio = 0.15;
+net.divideParam.testRatio = 0.15;
 
 %% TREINAR REDE NEURONAL
 [net, tr] = train(net, M, target);
@@ -59,7 +79,7 @@ out = sim(net, M);
 %% VISUALIZAR DESEMPENHO
 plotconfusion(target, out)          % Matriz de confusao (não está a conseguir processar a matriz de confusão!)
 plotperf(tr)                      % Grafico com o desempenho da rede nos 3 conjuntos 
-%}
+
 
 %% Calcula e mostra a percentagem de classificacoes corretas no total dos exemplos
 r=0;

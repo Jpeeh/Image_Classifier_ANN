@@ -1,4 +1,4 @@
-function formas_2()
+function net = formas2_GUI(neuronios, f_activacao, f_treino)
 
 d = dir(['C:\Users\Asus\Desktop\ISEC\CR\TP\TemaRN_Imagens\Formas_2' '\' '\**\' '*.png']); %% ->RETORNA TODAS AS IMAGENS PNG DENTRO DA PASTA FORMAS_2
 M = zeros(400,804);
@@ -36,12 +36,21 @@ for k = 603 : 804
    target(:, k) = x;
 end
 %% CRIAÇÃO E CONFIGURAÇÃO DA REDE NEURONAL DE 1 CAMADA COM 10 NEURÓNIOS
-net = feedforwardnet(10); %é a melhor configuração, segundo os resultados obtidos
-net.layers{1}.transferFcn = 'logsig';
-net.layers{1}.transferFcn = 'purelin';
+[~, c] = size(neuronios); %retorna um vector com o nº de linhas e colunas o array de células neuronios
+if c == 1
+    net = feedforwardnet(str2double(neuronios(1)));
+    net.layers{1}.transferFcn = char(f_activacao(1));
+    net.layers{2}.transferFcn = char(f_activacao(2));
+elseif c == 2
+    net = feedforwardnet([str2double(neuronios(1)) , str2double(neuronios(2))]);
+    net.layers{1}.transferFcn = char(f_activacao(1));
+    net.layers{2}.transferFcn = char(f_activacao(2));
+    net.layers{3}.transferFcn = char(f_activacao(3));
+end
+%net = feedforwardnet(10); %é a melhor configuração, segundo os resultados obtidos
 % a configuração com 2 camadas de 5 neurónios cada com as funções
 % ('losig','losig','purelin' e 'trainlm') tem os mesmos resultados que a de cima
-net.trainFcn = 'trainlm';
+net.trainFcn = char(f_treino(1));
 
 
 %% Divisão dos exemplos pelos conjuntos de treino, validação e teste
@@ -56,7 +65,7 @@ disp(tr);
 
 %% SIMULAR
 out = sim(net, M);
-save NN_FORMAS2;  %GUARDA A REDE NEURONAL DE NOME NN_FORMAS2;
+save NN_FORMAS2;
 
 %% VISUALIZAR DESEMPENHO
 plotconfusion(target, out)        % Matriz de confusao
