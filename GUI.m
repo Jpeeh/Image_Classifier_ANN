@@ -121,19 +121,20 @@ end
 % --- Executes on button press in pushbutton2.
 function pushbutton2_Callback(hObject, eventdata, handles)
 if isempty(handles.rede_neuronal)
-     errordlg('Configure primeiro a rede neuronal que quer guardar!', 'ERRO');
+     errordlg('Configure/treine primeiro a rede neuronal que quer guardar!', 'ERRO');
 else
     net = handles.rede_neuronal;
     save net;
+    guidata(hObject, handles);
 end
 
 % --- Executes on button press in pushbutton3.
 function pushbutton3_Callback(hObject, eventdata, handles)
 [file, path] = uigetfile('C:\Users\Asus\Desktop\ISEC\CR\TP\*.mat');
 aux = strcat(path,file);
-handles.rede_neuronal = load(aux);
+temp = load(aux);
+handles.rede_neuronal = temp;
 guidata(hObject, handles);
-
 
 % --- Executes on selection change in listbox2.
 function listbox2_Callback(hObject, eventdata, handles)
@@ -158,7 +159,6 @@ end
 
 % --- Executes on selection change in listbox3.
 function listbox3_Callback(hObject, eventdata, handles)
-
 Listbox3Names = {'trainbfg', 'trainbr', 'trainbu', 'trainc','traincgb', 'traincgf','traincgp','traingd','traingda','traingdm','traingdx','trainlm','trainoss', 'trainr', 'trainrp', 'trainru','trains', 'trainscg'};
 set(handles.listbox3, 'string', Listbox3Names);
 handles.contents2 = cellstr(get(hObject,'String'));

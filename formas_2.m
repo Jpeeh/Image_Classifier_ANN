@@ -36,13 +36,10 @@ for k = 603 : 804
    target(:, k) = x;
 end
 %% CRIAÇÃO E CONFIGURAÇÃO DA REDE NEURONAL DE 1 CAMADA COM 10 NEURÓNIOS
-net = feedforwardnet(10); %é a melhor configuração, segundo os resultados obtidos
+net = feedforwardnet(10); 
 net.layers{1}.transferFcn = 'logsig';
 net.layers{1}.transferFcn = 'purelin';
-% a configuração com 2 camadas de 5 neurónios cada com as funções
-% ('losig','losig','purelin' e 'trainlm') tem os mesmos resultados que a de cima
 net.trainFcn = 'trainlm';
-
 
 %% Divisão dos exemplos pelos conjuntos de treino, validação e teste
 net.divideFcn = 'dividerand';
