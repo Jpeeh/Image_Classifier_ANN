@@ -22,7 +22,7 @@ function varargout = GUI(varargin)
 
 % Edit the above text to modify the response to help GUI
 
-% Last Modified by GUIDE v2.5 19-May-2019 00:11:39
+% Last Modified by GUIDE v2.5 24-May-2019 16:29:39
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -52,6 +52,8 @@ function GUI_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to GUI (see VARARGIN)
 
+handles.rede_neuronal = [];
+
 % Choose default command line output for GUI
 handles.output = hObject;
 
@@ -75,28 +77,13 @@ varargout{1} = handles.output;
 
 
 function edit1_Callback(hObject, eventdata, handles)
-% hObject    handle to edit1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit1 as text
-%        str2double(get(hObject,'String')) returns contents of edit1 as a double
-
-
-%divido e guardo os valores (divididos por espaços em branco ou vírgulas)
-%representantes do numeros de neurónios por cada camada
-%%CADA NÚMERO REPRESENTA UMA CAMADA DE NEURÓNIOS
+%Divido e guardo os valores (divididos por espaços em branco ou vírgulas) representantes do numeros de neurónios por cada camada
+%CADA NÚMERO REPRESENTA UMA CAMADA DE NEURÓNIOS
 handles.neuronios = strsplit(get(hObject,'String'), {' ',','}, 'CollapseDelimiters', true);
 guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
 function edit1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 handles.neuronios = get(hObject, 'String');
 guidata(hObject, handles);
 
@@ -105,51 +92,12 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-function edit4_Callback(hObject, eventdata, handles)
-% hObject    handle to edit4 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit4 as text
-%        str2double(get(hObject,'String')) returns contents of edit4 as a double
-handles.f_activacao = lower(strsplit(get(hObject, 'String'), {' ', ','}, 'CollapseDelimiters', true));
-guidata(hObject, handles);
-
-% --- Executes during object creation, after setting all properties.
-function edit4_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit4 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-handles.f_activacao = get(hObject, 'String');
-guidata(hObject, handles);
-
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
 function edit5_Callback(hObject, eventdata, handles)
-% hObject    handle to edit5 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit5 as text
-%        str2double(get(hObject,'String')) returns contents of edit5 as a double
 handles.f_treino = lower(strsplit(get(hObject, 'String'), {' ', ','}, 'CollapseDelimiters', true));
 guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
 function edit5_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit5 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 handles.f_treino = get(hObject, 'String');
 guidata(hObject, handles);
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
@@ -159,16 +107,18 @@ end
 
 % --- Executes on button press in pushbutton1.
 function pushbutton1_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-[~, aux1] = size(handles.neuronios);
-[~, aux2] = size(handles.f_activacao);
+f_activacao = cell(1,length(handles.idx));
+for k = 1:length(handles.idx)
+    f_activacao(k) = handles.contents(handles.idx(k)); %copia as strings das funções de activação para um cell array auxiliar
+end
+
+num2 = get(handles.listbox2, 'Value'); % retorna o(s) indice(s) seleccinados da lista
+[~, aux1] = size(handles.neuronios);  
+[~, aux2] = size(num2);
 [~, aux3] = size(handles.f_treino);
+
 if isempty(handles.neuronios)
     errordlg('Introduza quantas camadas quer na rede neuronal!','ERRO');
-elseif isempty(handles.f_activacao)
-    errordlg('Nenhuma função de activação introduzida!','ERRO');
 elseif isempty(handles.f_treino)
     errordlg('Nenhuma função de treino introduzida!','ERRO');
 elseif aux3 > 1
@@ -176,22 +126,39 @@ elseif aux3 > 1
 elseif aux2 ~= aux1 + 1
     errordlg('Nº de funções de activação não correspondem à topologia da rede neuronal!', 'ERRO');
 else
-    rede_neuronal = formas2_GUI(handles.neuronios, handles.f_activacao, handles.f_treino);
-
+    handles.rede_neuronal = formas2_GUI(handles.neuronios, f_activacao, handles.f_treino);
+    guidata(hObject, handles);
 end
 
 % --- Executes on button press in pushbutton2.
 function pushbutton2_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-save rede_neuronal;
+if isempty(handles.rede_neuronal)
+     errordlg('Configure primeiro a rede neuronal que quer guardar!', 'ERRO');
+else
+    net = handles.rede_neuronal;
+    save net;
+end
 
 % --- Executes on button press in pushbutton3.
 function pushbutton3_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 [file, path] = uigetfile('C:\Users\Asus\Desktop\ISEC\CR\TP\*.mat');
 aux = strcat(path,file);
-load(aux);
+handles.rede_neuronal = load(aux);
+guidata(hObject, handles);
+
+
+% --- Executes on selection change in listbox2.
+function listbox2_Callback(hObject, eventdata, handles)
+% Hints: contents = cellstr(get(hObject,'String')) returns listbox2 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from listbox2
+Listbox2Names = {'tansig', 'logsig', 'purelin', 'compet', 'hardlim', 'hardlims', 'netinv','poslin','radbas','radbasn','satlin','satlins','softmax','tribas'};
+set(handles.listbox2, 'string', Listbox2Names);
+handles.contents = cellstr(get(hObject,'String'));
+handles.idx = get(hObject,'Value');
+guidata(hObject, handles);
+
+% --- Executes during object creation, after setting all properties.
+function listbox2_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

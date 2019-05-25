@@ -1,7 +1,7 @@
 function net = formas2_GUI(neuronios, f_activacao, f_treino)
 
-d = dir(['C:\Users\Asus\Desktop\ISEC\CR\TP\TemaRN_Imagens\Formas_2' '\' '\**\' '*.png']); %% ->RETORNA TODAS AS IMAGENS PNG DENTRO DA PASTA FORMAS_2
-M = zeros(400,804);
+d = dir(['C:\Users\Asus\Desktop\ISEC\CR\TP\TemaRN_Imagens\' '\' '\**\' '*.png']); %% ->RETORNA TODAS AS IMAGENS PNG DENTRO DA PASTA TEMARN_IMAGENS
+M = zeros(400,1028); %sao 1028 imagens no total!
 i = 1;
 for aux = 1 : size(d)
     folder = getfield(d, {aux}, 'folder');  % vai buscar a directoria da pasta
@@ -14,24 +14,21 @@ for aux = 1 : size(d)
     i = i + 1;
 end
 
-target = zeros(4,804); % criar matriz de zeros 4x804 (4 classes por cada imagem, neste caso são 804 imagens)
-for k = 1 : 198
-   x = zeros(1,4)';
+target = zeros(4,1028); % criar matriz de zeros 4x1028 (4 classes por cada imagem, neste caso são 1028 imagens)
+x = zeros(1,4)';
+for k = 1 : 260
    x(1,1) = 1;
    target(:, k) = x;
 end
-for k = 199 : 400
-    x = zeros(1,4)';
+for k = 261 : 516
     x(2,1) = 1;
    target(:, k) = x;
 end
-for k = 401 : 602
-   x = zeros(1,4)';
+for k = 517 : 772
    x(3,1) = 1;
    target(:, k) = x;
 end
-for k = 603 : 804
-   x = zeros(1,4)';
+for k = 773 : 1028
    x(4,1) = 1;
    target(:, k) = x;
 end
@@ -47,9 +44,6 @@ elseif c == 2
     net.layers{2}.transferFcn = char(f_activacao(2));
     net.layers{3}.transferFcn = char(f_activacao(3));
 end
-%net = feedforwardnet(10); %é a melhor configuração, segundo os resultados obtidos
-% a configuração com 2 camadas de 5 neurónios cada com as funções
-% ('losig','losig','purelin' e 'trainlm') tem os mesmos resultados que a de cima
 net.trainFcn = char(f_treino(1));
 
 
@@ -65,10 +59,9 @@ disp(tr);
 
 %% SIMULAR
 out = sim(net, M);
-save NN_FORMAS2;
 
 %% VISUALIZAR DESEMPENHO
-plotconfusion(target, out)        % Matriz de confusao
+% plotconfusion(target, out)         Matriz de confusao
 plotperf(tr)                      % Grafico com o desempenho da rede nos 3 conjuntos 
 
 %% Calcula e mostra a percentagem de classificacoes corretas no total dos exemplos
