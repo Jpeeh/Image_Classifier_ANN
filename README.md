@@ -19,3 +19,7 @@ The images are splitted by 4 folders.
   - **_Guardar Rede_ Button** - a push button that saves the neural network.
   
   After you train your network it will take some time to deploy the training plot, the perfomance plot and finally the confusion matrix plot where you can see the results of the training.
+
+
+## TO DO
+[x] - Corrigir o *update* de uma rede neuronal!
