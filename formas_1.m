@@ -8,13 +8,13 @@ datastore = imageDatastore(location); % Creates a datastore for all images in yo
 M = zeros(400,4); % 400 linhas (matriz de 20x20, cada imagem) por 4 colunas/imagens na pasta Formas_1
 i = 1;
 while hasdata(datastore)
-    BW = imbinarize(read(datastore));   % lê a image do datastore criado em cima e "binariza" a imagem lida
-    R = imresize(BW , 0.1); % redimensionamento da imagem binária, com 0.1 de escala, (a imagem fica 20x20)
+    BW = imbinarize(read(datastore));   % lê a imagem do datastore criado em cima e "binariza" a imagem lida
+    R = imresize(BW , 0.1);             % redimensionamento da imagem binária, com 0.1 de escala, (a imagem fica 20x20)
     vector = R(:);
-    M(:, i) = vector;       % cada coluna da matriz M fica com uma imagem .png
+    M(:, i) = vector;                   % cada coluna da matriz M fica com uma imagem .png
     i = i + 1;
-    %figure, imshow(img);     figure and imshow -> creates a new window for each image
-    %disp(R);               apresenta as matrizes binárias redimensionadas
+    %figure, imshow(img);               figure and imshow -> creates a new window for each image
+    %disp(R);                           apresenta as matrizes binárias redimensionadas
 end
 
 target = zeros(4); % criar matriz de zeros 4x4 (4 classes por cada imagem, neste caso são só 4 imagens)

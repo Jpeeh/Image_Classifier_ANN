@@ -22,7 +22,7 @@ function varargout = GUI(varargin)
 
 % Edit the above text to modify the response to help GUI
 
-% Last Modified by GUIDE v2.5 25-May-2019 16:38:50
+% Last Modified by GUIDE v2.5 25-May-2019 19:25:58
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -75,7 +75,6 @@ function varargout = GUI_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-
 function edit1_Callback(hObject, eventdata, handles)
 % Divido e guardo os valores (divididos por espaços em branco ou vírgulas) representantes do numeros de neurónios por cada camada
 % CADA NÚMERO REPRESENTA UMA CAMADA DE NEURÓNIOS
@@ -115,10 +114,9 @@ elseif aux3 > 1
 elseif aux2 ~= aux1 + 1
     errordlg('Nº de funções de activação não correspondem à topologia da rede neuronal!', 'ERRO');
 else
-    handles.rede_neuronal = formas2_GUI(handles.neuronios, f_activacao, handles.contents2(handles.idx2));
+    handles.rede_neuronal = GUI_NN(handles.neuronios, f_activacao, handles.contents2(handles.idx2));
     guidata(hObject, handles);
 end
-
 
 % --- Executes on button press in pushbutton2.
 function pushbutton2_Callback(hObject, eventdata, handles)
@@ -172,3 +170,10 @@ function listbox3_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in pushbutton4.
+function pushbutton4_Callback(hObject, eventdata, handles)
+[file, path] = uigetfile('C:\Users\Asus\Desktop\ISEC\CR\TP\*.png');
+aux = strcat(path,file);
+classifica_imagem(aux);
