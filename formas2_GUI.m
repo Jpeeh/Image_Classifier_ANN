@@ -44,7 +44,7 @@ elseif c == 2
     net.layers{2}.transferFcn = char(f_activacao(2));
     net.layers{3}.transferFcn = char(f_activacao(3));
 end
-net.trainFcn = char(f_treino(1));
+net.trainFcn = char(f_treino);
 
 
 %% Divisão dos exemplos pelos conjuntos de treino, validação e teste

@@ -22,7 +22,7 @@ function varargout = GUI(varargin)
 
 % Edit the above text to modify the response to help GUI
 
-% Last Modified by GUIDE v2.5 24-May-2019 16:29:39
+% Last Modified by GUIDE v2.5 25-May-2019 16:38:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -77,8 +77,8 @@ varargout{1} = handles.output;
 
 
 function edit1_Callback(hObject, eventdata, handles)
-%Divido e guardo os valores (divididos por espaços em branco ou vírgulas) representantes do numeros de neurónios por cada camada
-%CADA NÚMERO REPRESENTA UMA CAMADA DE NEURÓNIOS
+% Divido e guardo os valores (divididos por espaços em branco ou vírgulas) representantes do numeros de neurónios por cada camada
+% CADA NÚMERO REPRESENTA UMA CAMADA DE NEURÓNIOS
 handles.neuronios = strsplit(get(hObject,'String'), {' ',','}, 'CollapseDelimiters', true);
 guidata(hObject, handles);
 
@@ -92,43 +92,33 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-function edit5_Callback(hObject, eventdata, handles)
-handles.f_treino = lower(strsplit(get(hObject, 'String'), {' ', ','}, 'CollapseDelimiters', true));
-guidata(hObject, handles);
-
-% --- Executes during object creation, after setting all properties.
-function edit5_CreateFcn(hObject, eventdata, handles)
-handles.f_treino = get(hObject, 'String');
-guidata(hObject, handles);
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
 % --- Executes on button press in pushbutton1.
 function pushbutton1_Callback(hObject, eventdata, handles)
 f_activacao = cell(1,length(handles.idx));
 for k = 1:length(handles.idx)
-    f_activacao(k) = handles.contents(handles.idx(k)); %copia as strings das funções de activação para um cell array auxiliar
+    f_activacao(k) = handles.contents(handles.idx(k));  % copia as strings das funções de activação para um cell array auxiliar
 end
 
-num2 = get(handles.listbox2, 'Value'); % retorna o(s) indice(s) seleccinados da lista
+num = get(handles.listbox2, 'Value');                  % retorna o(s) indice(s) seleccinados da lista das fuções de activação
+num2 = get(handles.listbox3, 'Value');                 % retorna o índice seleccionado da lista das funções de treino
+
 [~, aux1] = size(handles.neuronios);  
-[~, aux2] = size(num2);
-[~, aux3] = size(handles.f_treino);
+[~, aux2] = size(num);
+[~, aux3] = size(num2);
 
 if isempty(handles.neuronios)
     errordlg('Introduza quantas camadas quer na rede neuronal!','ERRO');
-elseif isempty(handles.f_treino)
-    errordlg('Nenhuma função de treino introduzida!','ERRO');
+elseif isempty(handles.idx)
+    errordlg('Nº de funções de activação não correspondem à topologia da rede neuronal!', 'ERRO');
 elseif aux3 > 1
     errordlg('Introduza só 1 função de treino!','ERRO');
 elseif aux2 ~= aux1 + 1
     errordlg('Nº de funções de activação não correspondem à topologia da rede neuronal!', 'ERRO');
 else
-    handles.rede_neuronal = formas2_GUI(handles.neuronios, f_activacao, handles.f_treino);
+    handles.rede_neuronal = formas2_GUI(handles.neuronios, f_activacao, handles.contents2(handles.idx2));
     guidata(hObject, handles);
 end
+
 
 % --- Executes on button press in pushbutton2.
 function pushbutton2_Callback(hObject, eventdata, handles)
@@ -151,14 +141,34 @@ guidata(hObject, handles);
 function listbox2_Callback(hObject, eventdata, handles)
 % Hints: contents = cellstr(get(hObject,'String')) returns listbox2 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from listbox2
-Listbox2Names = {'tansig', 'logsig', 'purelin', 'compet', 'hardlim', 'hardlims', 'netinv','poslin','radbas','radbasn','satlin','satlins','softmax','tribas'};
-set(handles.listbox2, 'string', Listbox2Names);
-handles.contents = cellstr(get(hObject,'String'));
-handles.idx = get(hObject,'Value');
+
+Listbox2Names = {'tansig', 'logsig', 'purelin', 'compet', 'hardlim', 'hardlims', 'netinv', 'poslin', 'radbas', 'radbasn', 'satlin', 'satlins', 'softmax', 'tribas'};
+set(handles.listbox2, 'string', Listbox2Names);     % vai preencher a ListBox2 com a lista de strings acima mencionadas
+handles.contents = cellstr(get(hObject,'String'));  % converte a lista de strings para cell array
+handles.idx = get(hObject,'Value');                 % guardar os índices das strings seleccionadas
 guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
 function listbox2_CreateFcn(hObject, eventdata, handles)
+handles.idx = [];
+guidata(hObject, handles);
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in listbox3.
+function listbox3_Callback(hObject, eventdata, handles)
+
+Listbox3Names = {'trainbfg', 'trainbr', 'trainbu', 'trainc','traincgb', 'traincgf','traincgp','traingd','traingda','traingdm','traingdx','trainlm','trainoss', 'trainr', 'trainrp', 'trainru','trains', 'trainscg'};
+set(handles.listbox3, 'string', Listbox3Names);
+handles.contents2 = cellstr(get(hObject,'String'));
+handles.idx2 = get(hObject,'Value');
+guidata(hObject, handles);
+
+% --- Executes during object creation, after setting all properties.
+function listbox3_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
