@@ -17,9 +17,13 @@ The images are splitted by 4 folders.
   - **_Treinar Rede_ Button** - a push button to start training the neural network with the options above described;
   - **_Carregar Rede_ Button** - a push button that can load a previously trained neural network;
   - **_Guardar Rede_ Button** - a push button that saves the neural network.
+  - **_Carregar Ficheiro_ Button** - a push button to load a .png image, that will be classified by the Neural Network.
   
   After you train your network it will take some time to deploy the training plot, the perfomance plot and finally the confusion matrix plot where you can see the results of the training.
 
 
+## BUGS
+ [x] - When you load a neural network you have to re-select the activation functions, if not, it will give you an error that indicates you that the architecture of the NN is incorrect.
+ 
 ## TO DO
-[x] - Corrigir o *update* de uma rede neuronal!
+ [x] - Mostrar plot confusion do treino da Rede Neuronal
