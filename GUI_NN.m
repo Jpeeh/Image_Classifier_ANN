@@ -64,8 +64,8 @@ disp(tr);
 out = sim(net, M);
 
 %% VISUALIZAR DESEMPENHO
-% plotconfusion(target, out)         Matriz de confusao
-plotperf(tr)                      % Grafico com o desempenho da rede nos 3 conjuntos 
+%plotconfusion(target, out)    % Matriz de confusao
+plotperf(tr)                  % Grafico com o desempenho da rede nos 3 conjuntos 
 
 %% Calcula e mostra a percentagem de classificacoes corretas no total dos exemplos
 r=0;

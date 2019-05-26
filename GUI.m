@@ -22,7 +22,7 @@ function varargout = GUI(varargin)
 
 % Edit the above text to modify the response to help GUI
 
-% Last Modified by GUIDE v2.5 25-May-2019 19:25:58
+% Last Modified by GUIDE v2.5 26-May-2019 17:01:36
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -124,7 +124,7 @@ if isempty(handles.rede_neuronal)
      errordlg('Configure/treine primeiro a rede neuronal que quer guardar!', 'ERRO');
 else
     net = handles.rede_neuronal;
-    save net;
+    save ('net','net','handles');
     guidata(hObject, handles);
 end
 
@@ -133,8 +133,16 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 [file, path] = uigetfile('C:\Users\Asus\Desktop\ISEC\CR\TP\*.mat');
 aux = strcat(path,file);
 temp = load(aux);
-handles.rede_neuronal = temp;
+
+handles.neuronios = temp.handles.neuronios;
+
+handles.contents = temp.handles.contents;
+handles.idx = temp.handles.idx;
+
+handles.contents2 = temp.handles.contents2;
+handles.idx2 = temp.handles.idx2;
 guidata(hObject, handles);
+close(GUI);
 
 % --- Executes on selection change in listbox2.
 function listbox2_Callback(hObject, eventdata, handles)
@@ -160,7 +168,7 @@ end
 % --- Executes on selection change in listbox3.
 function listbox3_Callback(hObject, eventdata, handles)
 Listbox3Names = {'trainbfg', 'trainbr', 'trainbu', 'trainc','traincgb', 'traincgf','traincgp','traingd','traingda','traingdm','traingdx','trainlm','trainoss', 'trainr', 'trainrp', 'trainru','trains', 'trainscg'};
-set(handles.listbox3, 'string', Listbox3Names);
+set(handles.listbox3, 'String', Listbox3Names);
 handles.contents2 = cellstr(get(hObject,'String'));
 handles.idx2 = get(hObject,'Value');
 guidata(hObject, handles);
