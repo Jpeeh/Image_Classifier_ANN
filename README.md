@@ -20,6 +20,7 @@ The images are splitted by 4 folders.
   - **_Carregar Ficheiro_ Button** - a push button to load a .png image, that will be classified by the Neural Network.
   
   After you train your network it will take some time to deploy the training plot, the perfomance plot and finally the confusion matrix plot where you can see the results of the training.
+  The results.txt registers the results of the neural network training.
 
 
 ## BUGS
