@@ -101,7 +101,8 @@ end
 num = get(handles.listbox2, 'Value');                  % retorna o(s) indice(s) seleccinados da lista das fuções de activação
 num2 = get(handles.listbox3, 'Value');                 % retorna o índice seleccionado da lista das funções de treino
 
-[~, aux1] = size(handles.neuronios);  
+neuronios_aux = strsplit(handles.neuronios, {' ',','});
+[~, aux1] = size(neuronios_aux);  
 [~, aux2] = size(num);
 [~, aux3] = size(num2);
 
@@ -114,7 +115,7 @@ elseif aux3 > 1
 elseif aux2 ~= aux1 + 1
     errordlg('Nº de funções de activação não correspondem à topologia da rede neuronal!', 'ERRO');
 else
-    handles.rede_neuronal = GUI_NN(handles.neuronios, f_activacao, handles.contents2(handles.idx2));
+    handles.rede_neuronal = GUI_NN(handles.neuronios, f_activacao, handles.contents2(handles.idx2), handles.rede_neuronal);
     guidata(hObject, handles);
 end
 
@@ -133,12 +134,10 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 [file, path] = uigetfile('C:\Users\Asus\Desktop\ISEC\CR\TP\*.mat');
 aux = strcat(path,file);
 temp = load(aux);
-
+handles.rede_neuronal = temp.net;
 handles.neuronios = temp.handles.neuronios;
-
 handles.contents = temp.handles.contents;
 handles.idx = temp.handles.idx;
-
 handles.contents2 = temp.handles.contents2;
 handles.idx2 = temp.handles.idx2;
 guidata(hObject, handles);
@@ -148,7 +147,6 @@ close(GUI);
 function listbox2_Callback(hObject, eventdata, handles)
 % Hints: contents = cellstr(get(hObject,'String')) returns listbox2 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from listbox2
-
 Listbox2Names = {'tansig', 'logsig', 'purelin', 'compet', 'hardlim', 'hardlims', 'netinv', 'poslin', 'radbas', 'radbasn', 'satlin', 'satlins', 'softmax', 'tribas'};
 set(handles.listbox2, 'string', Listbox2Names);     % vai preencher a ListBox2 com a lista de strings acima mencionadas
 handles.contents = cellstr(get(hObject,'String'));  % converte a lista de strings para cell array
@@ -157,8 +155,8 @@ guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
 function listbox2_CreateFcn(hObject, eventdata, handles)
-handles.idx = [];
-guidata(hObject, handles);
+%handles.idx = [];
+%guidata(hObject, handles);
 
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');

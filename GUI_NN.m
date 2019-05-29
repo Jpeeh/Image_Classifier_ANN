@@ -1,5 +1,6 @@
-function net = GUI_NN(neuronios, f_activacao, f_treino)
+function net = GUI_NN(neuronios, f_activacao, f_treino, net)
 
+fid = fopen('results.txt', 'wt');
 d = dir(['C:\Users\Asus\Desktop\ISEC\CR\TP\TemaRN_Imagens\' '\' '\**\' '*.png']); %% ->RETORNA TODAS AS IMAGENS PNG DENTRO DA PASTA TEMARN_IMAGENS
 M = zeros(400,1028); %sao 1028 imagens no total!
 i = 1;
@@ -35,7 +36,8 @@ for k = 773 : 1028
    x(4,1) = 1;
    target(:, k) = x;
 end
-%% CRIAÇÃO E CONFIGURAÇÃO DA REDE NEURONAL DE 1 CAMADA COM 10 NEURÓNIOS
+%% CONFIGURAÇÃO DA REDE NEURONAL
+if(isempty(net))
 [~, c] = size(neuronios); %retorna um vector com o nº de linhas e colunas o array de células neuronios
 if c == 1
     net = feedforwardnet(str2double(neuronios(1)));
@@ -47,8 +49,8 @@ elseif c == 2
     net.layers{2}.transferFcn = char(f_activacao(2));
     net.layers{3}.transferFcn = char(f_activacao(3));
 end
-net.trainFcn = char(f_treino);
-
+net.trainFcn = char(f_treino);    
+end
 
 %% Divisão dos exemplos pelos conjuntos de treino, validação e teste
 net.divideFcn = 'dividerand';
@@ -64,8 +66,8 @@ disp(tr);
 out = sim(net, M);
 
 %% VISUALIZAR DESEMPENHO
-%plotconfusion(target, out)    % Matriz de confusao
-plotperf(tr)                  % Grafico com o desempenho da rede nos 3 conjuntos 
+%plotconfusion(target, out)     % Matriz de confusao
+plotperf(tr)                   % Grafico com o desempenho da rede nos 3 conjuntos 
 
 %% Calcula e mostra a percentagem de classificacoes corretas no total dos exemplos
 r=0;
@@ -78,7 +80,7 @@ for i=1:size(out,2)                 % Para cada classificacao
 end
 
 accuracy = r/size(out,2)*100;
-fprintf('Precisao total %f\n', accuracy)
+fprintf(fid, 'Precisao total: %f\n', accuracy);
 
 
 %% SIMULAR A REDE APENAS NO CONJUNTO DE TESTE
@@ -97,6 +99,6 @@ for i = 1:size(tr.testInd, 2)       % Para cada classificacao
   end
 end
 accuracy = r/size(tr.testInd,2)*100;
-fprintf('Precisao teste %f\n', accuracy)
-
+fprintf(fid, 'Precisao teste: %f\n', accuracy);
+fclose(fid);
 end
