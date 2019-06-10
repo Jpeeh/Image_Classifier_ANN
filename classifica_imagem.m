@@ -1,19 +1,20 @@
-function classifica_imagem( input )
+function classifica_imagem( input , net)
 %recebe a directoria da imagem carregada pelo utilizador
 
 MB = imread(input);  % lê-se a imagem e binaria-a para uma matriz
 R = imresize(MB, 0.1);
 vector = R(:);
 
-target = eye(400,1); % dúvidas no TARGET!
 
-%% CRIAÇÃO E CONFIGURAÇÃO DA REDE NEURONAL DE 1 CAMADA COM 10 NEURÓNIOS
+
+%% CONFIGURAÇÃO DA REDE NEURONAL DE 1 CAMADA COM 10 NEURÓNIOS
+if (isempty(net))
 net = feedforwardnet(10); 
 net.layers{1}.transferFcn = 'tansig'; 
 net.layers{2}.transferFcn = 'purelin'; 
 net.trainFcn = 'trainlm';
-
 net.divideFcn = ''; %CONFIGURAÇÃO DEFAULT
+end
 
 %TREINAR REDE NEURONAL
 [net, tr] = train(net, vector, target);

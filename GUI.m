@@ -182,4 +182,4 @@ end
 function pushbutton4_Callback(hObject, eventdata, handles)
 [file, path] = uigetfile('C:\Users\Asus\Desktop\ISEC\CR\TP\*.png');
 aux = strcat(path,file);
-classifica_imagem(aux);
+classifica_imagem(aux, handles.rede_neuronal);
