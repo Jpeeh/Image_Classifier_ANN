@@ -8,7 +8,9 @@ The images are splitted by 4 folders.
  - The third folder (Formas_3) has 50 images of each shape;
  - And the last folder (Formas_4) has 5 images of each shape;
 
-
+### Compilation:
+ For you, in order to execute this application, you have to install Matlab (should choose the version 2017).
+ 
 ### GUI explanation:
   - **_Nº de Neurónio_** - how many neuros by layer do you want to be in your Neural Network (it's splitted by blank spaces or commas);
   - **_Funções de activação_** - write the activation functions for your neural network, you have to write the number of layers plus one activation functions;
