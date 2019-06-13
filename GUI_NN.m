@@ -1,13 +1,13 @@
 function net = GUI_NN(neuronios, f_activacao, f_treino, net)
 
 fid = fopen('results.txt', 'wt');
-d = dir(['C:\Users\Asus\Desktop\ISEC\CR\TP\TemaRN_Imagens\' '\' '\**\' '*.png']); %% ->RETORNA TODAS AS IMAGENS PNG DENTRO DA PASTA TEMARN_IMAGENS
+d = dir(['/home/branco/Desktop/CR_TP/Image_Classifier_ANN-master/TemaRN_Imagens' '/' '/**/' '*.png']); %% ->RETORNA TODAS AS IMAGENS PNG DENTRO DA PASTA TEMARN_IMAGENS
 M = zeros(400,1028); %sao 1028 imagens no total!
 i = 1;
 for aux = 1 : size(d)
     folder = getfield(d, {aux}, 'folder');  % vai buscar a directoria da pasta
     name = getfield(d, {aux}, 'name');      % dentro da directoria da pasta vai buscar o nome de cada imagem .png
-    image = strcat(folder, '\', name);      % Cria/concatena a string relativa à directoria completa de cada imagem
+    image = strcat(folder, '/', name);      % mudar sentido da barra no WINDOWS -> Cria/concatena a string relativa ï¿½ directoria completa de cada imagem
     MW = imbinarize(imread(image));
     R = imresize(MW, 0.1);
     vector = R(:);
@@ -15,7 +15,7 @@ for aux = 1 : size(d)
     i = i + 1;
 end
 
-target = zeros(4,1028); % criar matriz de zeros 4x1028 (4 classes por cada imagem, neste caso são 1028 imagens)
+target = zeros(4,1028); % criar matriz de zeros 4x1028 (4 classes por cada imagem, neste caso sï¿½o 1028 imagens)
 for k = 1 : 260
    x = zeros(1,4)';
    x(1,1) = 1;
@@ -36,9 +36,10 @@ for k = 773 : 1028
    x(4,1) = 1;
    target(:, k) = x;
 end
-%% CONFIGURAÇÃO DA REDE NEURONAL
+
+%% CONFIGURAï¿½ï¿½O DA REDE NEURONAL
 if(isempty(net))
-[~, c] = size(neuronios); %retorna um vector com o nº de linhas e colunas o array de células neuronios
+[~, c] = size(neuronios); %retorna um vector com o nï¿½ de linhas e colunas o array de cï¿½lulas neuronios
 if c == 1
     net = feedforwardnet(str2double(neuronios(1)));
     net.layers{1}.transferFcn = char(f_activacao(1));
@@ -52,7 +53,7 @@ end
 net.trainFcn = char(f_treino);    
 end
 
-%% Divisão dos exemplos pelos conjuntos de treino, validação e teste
+%% Divisï¿½o dos exemplos pelos conjuntos de treino, validaï¿½ï¿½o e teste
 net.divideFcn = 'dividerand';
 net.divideParam.trainRatio = 0.7;
 net.divideParam.valRatio = 0.15;

@@ -76,8 +76,8 @@ varargout{1} = handles.output;
 
 
 function edit1_Callback(hObject, eventdata, handles)
-% Divido e guardo os valores (divididos por espaços em branco ou vírgulas) representantes do numeros de neurónios por cada camada
-% CADA NÚMERO REPRESENTA UMA CAMADA DE NEURÓNIOS
+% Divido e guardo os valores (divididos por espaï¿½os em branco ou vï¿½rgulas) representantes do numeros de neurï¿½nios por cada camada
+% CADA Nï¿½MERO REPRESENTA UMA CAMADA DE NEURï¿½NIOS
 handles.neuronios = strsplit(get(hObject,'String'), {' ',','}, 'CollapseDelimiters', true);
 guidata(hObject, handles);
 
@@ -95,25 +95,24 @@ end
 function pushbutton1_Callback(hObject, eventdata, handles)
 f_activacao = cell(1,length(handles.idx));
 for k = 1:length(handles.idx)
-    f_activacao(k) = handles.contents(handles.idx(k));  % copia as strings das funções de activação para um cell array auxiliar
+    f_activacao(k) = handles.contents(handles.idx(k));  % copia as strings das funï¿½ï¿½es de activaï¿½ï¿½o para um cell array auxiliar
 end
 
-num = get(handles.listbox2, 'Value');                  % retorna o(s) indice(s) seleccinados da lista das fuções de activação
-num2 = get(handles.listbox3, 'Value');                 % retorna o índice seleccionado da lista das funções de treino
+num = get(handles.listbox2, 'Value');                  % retorna o(s) indice(s) seleccinados da lista das fuï¿½ï¿½es de activaï¿½ï¿½o
+num2 = get(handles.listbox3, 'Value');                 % retorna o ï¿½ndice seleccionado da lista das funï¿½ï¿½es de treino
 
-neuronios_aux = strsplit(handles.neuronios, {' ',','});
-[~, aux1] = size(neuronios_aux);  
+[~, aux1] = size(handles.neuronios);  
 [~, aux2] = size(num);
 [~, aux3] = size(num2);
 
 if isempty(handles.neuronios)
     errordlg('Introduza quantas camadas quer na rede neuronal!','ERRO');
 elseif isempty(handles.idx)
-    errordlg('Nº de funções de activação não correspondem à topologia da rede neuronal!', 'ERRO');
+    errordlg('Nï¿½ de funï¿½ï¿½es de activaï¿½ï¿½o nï¿½o correspondem ï¿½ topologia da rede neuronal!', 'ERRO');
 elseif aux3 > 1
-    errordlg('Introduza só 1 função de treino!','ERRO');
+    errordlg('Introduza sï¿½ 1 funï¿½ï¿½o de treino!','ERRO');
 elseif aux2 ~= aux1 + 1
-    errordlg('Nº de funções de activação não correspondem à topologia da rede neuronal!', 'ERRO');
+    errordlg('Nï¿½ de funï¿½ï¿½es de activaï¿½ï¿½o nï¿½o correspondem ï¿½ topologia da rede neuronal!', 'ERRO');
 else
     handles.rede_neuronal = GUI_NN(handles.neuronios, f_activacao, handles.contents2(handles.idx2), handles.rede_neuronal);
     guidata(hObject, handles);
@@ -131,7 +130,9 @@ end
 
 % --- Executes on button press in pushbutton3.
 function pushbutton3_Callback(hObject, eventdata, handles)
-[file, path] = uigetfile('C:\Users\Asus\Desktop\ISEC\CR\TP\*.mat');
+%PARA WINDOWS -> [file, path] = uigetfile('C:\Users\Asus\Desktop\ISEC\CR\TP\*.mat');
+[file, path] = uigetfile('/home/branco/Desktop/CR_TP/Image_Classifier_ANN-master/*.mat');
+
 aux = strcat(path,file);
 temp = load(aux);
 handles.rede_neuronal = temp.net;
@@ -150,13 +151,13 @@ function listbox2_Callback(hObject, eventdata, handles)
 Listbox2Names = {'tansig', 'logsig', 'purelin', 'compet', 'hardlim', 'hardlims', 'netinv', 'poslin', 'radbas', 'radbasn', 'satlin', 'satlins', 'softmax', 'tribas'};
 set(handles.listbox2, 'string', Listbox2Names);     % vai preencher a ListBox2 com a lista de strings acima mencionadas
 handles.contents = cellstr(get(hObject,'String'));  % converte a lista de strings para cell array
-handles.idx = get(hObject,'Value');                 % guardar os índices das strings seleccionadas
+handles.idx = get(hObject,'Value');                 % guardar os ï¿½ndices das strings seleccionadas
 guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
 function listbox2_CreateFcn(hObject, eventdata, handles)
-%handles.idx = [];
-%guidata(hObject, handles);
+handles.idx = [];
+guidata(hObject, handles);
 
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
@@ -180,6 +181,7 @@ end
 
 % --- Executes on button press in pushbutton4.
 function pushbutton4_Callback(hObject, eventdata, handles)
-[file, path] = uigetfile('C:\Users\Asus\Desktop\ISEC\CR\TP\*.png');
+%PARA WINDOWS -> [file, path] = uigetfile('C:\Users\Asus\Desktop\ISEC\CR\TP\*.png');
+[file, path] = uigetfile('/home/branco/Desktop/CR_TP/Image_Classifier_ANN-master/*.png');
 aux = strcat(path,file);
 classifica_imagem(aux, handles.rede_neuronal);

@@ -1,2 +1,2 @@
-Precisao total: 61.478599
-Precisao teste: 66.233766
+Precisao total: 66.439689
+Precisao teste: 63.636364
