@@ -24,9 +24,9 @@ The images are splitted by 4 folders.
   After you train your network it will take some time to deploy the training plot, the perfomance plot and finally the confusion matrix plot where you can see the results of the training.
   The results.txt registers the results of the neural network training.
 
+## NOTE:
+ All the paths in the project are from a Linux dircetory, you have to modify the directory of the "TemaRN_Imagens folder!
 
 ## BUGS
  [x] - When you load a neural network you have to re-select the activation functions, if not, it will give you an error that indicates you that the architecture of the NN is incorrect.
  
-## TO DO
- [x] - Mostrar plot confusion do treino da Rede Neuronal
